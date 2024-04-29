@@ -65,6 +65,7 @@ nanValue: .word 0x7FFFFFFF
  .type initVariables,%function
 initVariables:
     /* YOUR initVariables CODE BELOW THIS LINE! Don't forget to push and pop! */
+    /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
     /**This is for f1 and its variables**/
     mov r10,0	    /**storing 0 in r10 for initializing varliables to 0**/    
@@ -100,9 +101,9 @@ initVariables:
     str r10,[r4]	/**storing 0 in memory location of expMax**/
     ldr r4,=mantMax	/**storing memory location of mantMax in r4**/
     str r10,[r4]	/**storing 0 in memory location of mantMax**/
-    
+    /**restore the caller's registers, as required by the ARM calling convention**/
     pop {r4-r11,LR}
-    mov pc, lr
+    mov pc, lr		/**initVariables return to caller**/
     /* YOUR initVariables CODE ABOVE THIS LINE! Don't forget to push and pop! */
 
     
@@ -119,6 +120,7 @@ initVariables:
 .type getSignBit,%function
 getSignBit:
     /* YOUR getSignBit CODE BELOW THIS LINE! Don't forget to push and pop! */
+    /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
     
     mov r11,1		/**storing 1 in r11 for the negative sign bit**/
@@ -129,9 +131,9 @@ getSignBit:
     movmi r5,r11	/**if the negative flag is set store 1 in r5**/
     movpl r5,r10	/**if the negative flag is not set, store 0 in r5**/
     str r5,[r1]		/**store the value in r5 to output r1, mem location given by r1**/
-    
+    /**restore the caller's registers, as required by the ARM calling convention**/
     pop {r4-r11,LR}
-    mov pc, lr
+    mov pc, lr		/**getSignBit return to caller**/
     /* YOUR getSignBit CODE ABOVE THIS LINE! Don't forget to push and pop! */
     
 
@@ -158,6 +160,7 @@ getSignBit:
 .type getExponent,%function
 getExponent:
     /* YOUR getExponent CODE BELOW THIS LINE! Don't forget to push and pop! */
+    /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
     
     ldr r4,=0x7F800000	/**storing the 0x7F800000 in r4, which will be used to get the exponent value**/
@@ -181,8 +184,9 @@ getExponent:
     str r5,[r2]		/**store the result value in r5, in the memory location addressed by input r2. This is the unbiased exponent**/
     
     done_getExponent:	/**This is the end of the getExponent function**/
+    /**restore the caller's registers, as required by the ARM calling convention**/
     pop {r4-r11,LR}
-    mov pc, lr
+    mov pc, lr		/**getExponent return to caller**/
     /* YOUR getExponent CODE ABOVE THIS LINE! Don't forget to push and pop! */
    
 
@@ -200,6 +204,7 @@ getExponent:
 .type getMantissa,%function
 getMantissa:
     /* YOUR getMantissa CODE BELOW THIS LINE! Don't forget to push and pop! */
+    /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
     
     ldr r6,=0x7FFFFF	    /**storing 0x7FFFFF in r6, which will be used to get the mantissa value**/
@@ -233,9 +238,9 @@ getMantissa:
     str r4,[r1]		    /**storing 0 in mem location addressed by input r1**/
     
     done_for_sign:	    /**end of the getMantissa method**/
-    
+    /**restore the caller's registers, as required by the ARM calling convention**/
     pop {r4-r11,LR}
-    mov pc,lr
+    mov pc,lr		    /**getMantissa return to caller**/
     /* YOUR getMantissa CODE ABOVE THIS LINE! Don't forget to push and pop! */
    
 
@@ -276,6 +281,7 @@ asmFmax:
      */
 
     /* YOUR asmFmax CODE BELOW THIS LINE! VVVVVVVVVVVVVVVVVVVVV  */
+    /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
     mov r10,0		/**storing 0 in r10 to mamipulate the variables later**/
     
@@ -469,10 +475,11 @@ asmFmax:
     ldr r1,=mantMax	/**store the address of mantMax in r1**/
     BL getMantissa	/**call the getMantissa function to get the mantMax value**/
     
-    done:
-    
+    done:		/**This is the end of the asmFmax function**/
+    /**restore the caller's registers, as required by the ARM calling convention**/
     pop {r4-r11,LR}
-    mov pc,lr
+    mov pc,lr		/**asmFmax return to caller**/
+    
     /* YOUR asmFmax CODE ABOVE THIS LINE! ^^^^^^^^^^^^^^^^^^^^^  */
 
    
